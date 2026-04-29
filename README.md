@@ -1,12 +1,10 @@
 <h1>ExpNo 1 :Developing AI Agent with PEAS Description</h1>
-<h3>Name: GAYATHRI S</h3>
-<h3>Register Number: 212224060078</h3>
+<h3>Name: GAYATHRI S </h3>
+<h3>Register Number: 212224060078 </h3>
 
 
 <h3>AIM:</h3>
-<br>
 <p>To find the PEAS description for the given AI problem and develop an AI agent.</p>
-<br>
 <h3>Theory</h3>
 <h3>Medicine prescribing agent:</h3>
 <p>Such this agent prescribes medicine for fever (greater than 98.5 degrees) which we consider here as unhealthy, by the user temperature input, and another environment is rooms in the hospital (two rooms). This agent has to consider two factors one is room location and an unhealthy patient in a random room, the agent has to move from one room to another to check and treat the unhealthy person. The performance of the agent is calculated by incrementing performance and each time after treating in one room again it has to check another room so that the movement causes the agent to reduce its performance. Hence, agents prescribe medicine to unhealthy.</p>
@@ -40,58 +38,51 @@
 <p>Treat unhealthy patients in each room. And check for the unhealthy patients in random room</p>
 <h3>STEP 5:</h3>
 <p>Measure the performance parameters: For each treatment performance incremented, for each movement performance decremented</p>
+<h3>PROGRAM:</h3>
 
-# Step 1 & 2: Inputs and outputs handled in environment
-~~~
-class HospitalEnvironment:
-    def __init__(self, rooms=3):
-        # Each room has a patient with random temperature
-        self.rooms = {f"Room{i+1}": random.randint(97, 103) for i in range(rooms)}
-        self.agent_location = "Room1"
+```
+import random
+
+class MedicinePrescribingAgent:
+    def __init__(self):
+        self.rooms = ["Room 1", "Room 2"]
         self.performance = 0
+        self.environment = {}
+        self.unhealthy_room = random.choice(self.rooms)  #one unhealthy room
 
-    def is_patient_sick(self):
-        return self.rooms[self.agent_location] >= 100  # fever if temp ≥ 100
+    def get_temperature(self, room):
+        return round(
+            random.uniform(99, 102) if room == self.unhealthy_room
+            else random.uniform(97, 98.5), 1
+        )
 
-    def treat(self):
-        if self.is_patient_sick():
-            self.rooms[self.agent_location] = 98  # reset temperature (treated)
-            self.performance += 10
-        else:
-            self.performance -= 1  # unnecessary treatment
+    def run(self):
+        print("Medicine Prescribing Agent Simulation Started\n")
+        for i, room in enumerate(self.rooms):
+            temp = self.get_temperature(room)
+            self.environment[room] = temp
+            print(f"Checking {room}... Patient temperature: {temp}°F")
+            if temp > 98.5:
+                print(f"Treatment given in {room}.")
+                self.performance += 10
+            else:
+                print(f"No treatment needed in {room}.")
+            
+            if i == 0:
+                print(f"\nMoving from {room} to {self.rooms[1]}...")
+                self.performance -= 1
+        
+        print("\nSimulation Complete!")
+        print(f"Final Performance Score: {self.performance}")
+        print(f"Environment State: {self.environment}")
 
-    def move(self):
-        # move randomly to another room
- self.agent_location = random.choice(list(self.rooms.keys()))
-        self.performance -= 1
+agent = MedicinePrescribingAgent()
+agent.run()
+```
+OUTPUT:
+<img width="594" height="459" alt="image" src="https://github.com/user-attachments/assets/006fe794-1661-4921-a211-6de76b7fe612" />
 
-    def status(self):
-        return f"Location: {self.agent_location}, Rooms: {self.rooms}, Score: {self.performance}"
-~~~
 
-# Step 4: Agent
-~~~
-class DoctorAgent:
-    def program(self, env):
-        if env.is_patient_sick():
-            return "TREAT"
-        else:
-            return "MOVE"
+RESULT:
+Thus the AI agent is developed successfully
 
-# Step 5: Run simulation
-env = HospitalEnvironment(rooms=3)
-agent = DoctorAgent()
-
-print("Initial:", env.status())
-for step in range(8):
-    action = agent.program(env)
-    if action == "TREAT":
-        env.treat()
-    else:
-        env.move()
- print(f"Step {step+1}: Action={action} -> {env.status()}")
-
-print("\nFinal Score:", env.performance)
-~~~
-# OUTPUT:
-<img width="1599" height="671" alt="image" src="https://github.com/user-attachments/assets/c2c99cec-2731-444b-a3bc-5c64b25ca53e" />
